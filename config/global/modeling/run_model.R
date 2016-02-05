@@ -20,11 +20,11 @@ run_model <- function(key = director$cache_get("last_key"), ..., fresh = FALSE,
   keys <- director$find(key, base = 'models')
   if (length(keys) == 0) {
     stop("No model ", sQuote(key),
-         " found in syberia project ", sQuote(root()), call. = FALSE)
+         " found in syberia project ", sQuote(director$root()), call. = FALSE)
   }
   
   # Construct the stageRunner and then execute it.
-  director$cache_set("last_run",
-    director$resource(keys[1])$run(..., verbose = verbose))
+  invisible(director$cache_set("last_run",
+    director$resource(keys[1])$run(..., verbose = verbose))[[1L]])
 }
 

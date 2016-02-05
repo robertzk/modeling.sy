@@ -27,13 +27,8 @@ preprocess_munge_procedure <- function(munge_procedure) {
 data_stage <- function(modelenv, munge_procedure, remember = TRUE) {
   munge_procedure <- preprocess_munge_procedure(munge_procedure)
 
-  stagerunner <- munge(modelenv, munge_procedure,
-    stagerunner = list(remember = remember),
-    train_only = TRUE # This refers to us not wanting to set the mungebits
-                      # as "trained" when running this stageRunner, since we
-                      # would like to be able to run them multiple times -- 
-                      # the stageRunner used in the main syberia model run is
-                      # only used for training.
+  stagerunner <- mungebits2::munge(modelenv, munge_procedure,
+    stagerunner = list(remember = remember)
   ) 
 
   stagerunner

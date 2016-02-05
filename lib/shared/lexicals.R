@@ -7,9 +7,9 @@ lexicals$`~` <- (function() {
       if ((xlist <- try_check(x, is.list)) || (ylist <- try_check(y, is.list))) {
         list(x, y)
       } else if ((xfn <- try_check(x, is.function)) || (yfn <- try_check(y, is.function))) {
-        mungebits:::mungebit$new(x, y, enforce_train = FALSE)
+        mungebits2:::mungebit$new(x, y, enforce_train = FALSE)
       } else if ((xfn <- try_check(x, is.mungebit)) || (yfn <- try_check(y, is.mungebit))) {
-        mungebits:::mungebit$new(x, y, enforce_train = FALSE)
+        mungebits2:::mungebit$new(x, y, enforce_train = FALSE)
       } else {
         eval.parent(parse(text =
           paste0("(function() { `~` <- .Primitive('~')\n",

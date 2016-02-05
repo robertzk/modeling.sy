@@ -1,6 +1,6 @@
 # Export stage.
 
-default_adapter <- resource('lib/shared/default_adapter')
+default_adapter <- resource("lib/shared/default_adapter")
 
 #' Build a stagerunner for exporting data with backup sources.
 #'

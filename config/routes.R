@@ -1,12 +1,12 @@
 list(
-  'config/global'  = 'globals',
+  "config/global"  = "globals",
 
-  'lib/adapters'    = 'adapters',
-  'lib/classifiers' = 'classifiers',
-  'lib/mungebits'   = 'mungebits',
+  "lib/adapters"    = "adapters",
+  "lib/classifiers" = "classifiers",
+  "lib/mungebits"   = "mungebits",
 
-  'models'          = 'models',
-  'test/models'     = 'test/models',
+  "models"          = "models",
+  "test/models"     = "test/models",
 
-  'data'            = 'data'
+  "data"            = "data"
 )

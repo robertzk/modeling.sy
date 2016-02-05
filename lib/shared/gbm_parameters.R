@@ -15,6 +15,6 @@ function(trees = 6500, shrinkage = 0.002, ...) {
     , prediction_type     = 'response'
   )
 
-  mungebits::list_merge(options, list(...))
+  mungebits2::list_merge(options, list(...))
 }
 

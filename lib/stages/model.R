@@ -29,7 +29,7 @@ model_stage <- function(modelenv, model_parameters) {
   model_parameters$.id_var <- NULL
 
   function(modelenv) {
-    mungepieces <- attr(modelenv$data, 'mungepieces')
+    mungepieces <- attr(modelenv$data, "mungepieces")
 
     # Instantiate tundra container for model
     modelenv$model_stage$model <- model_fn(list(), model_parameters)
@@ -77,10 +77,6 @@ model_stage <- function(modelenv, model_parameters) {
 
     # Manually skip munge procedure since it was already done
     modelenv$model_stage$model$munge_procedure <- mungepieces %||% list()
-    # Since munge was called with train_only, the mungebits are incapable of
-    # getting predicted. The line below remedies this.
-    for (ix in seq_along(modelenv$model_stage$model$munge_procedure))
-      modelenv$model_stage$model$munge_procedure[[ix]]$bit$trained <- TRUE
   }
 }
 

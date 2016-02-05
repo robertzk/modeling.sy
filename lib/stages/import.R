@@ -1,6 +1,6 @@
 # Import stage.
 
-default_adapter <- resource('lib/shared/default_adapter')
+default_adapter <- resource("lib/shared/default_adapter")
 
 #' Build a stagerunner for importing data with backup sources.
 #'
@@ -15,8 +15,8 @@ build_import_stagerunner <- function(modelenv, import_options) {
 
   stages <- Reduce(append, lapply(seq_along(import_options), function(index) {
     adapter_name <- names(import_options)[index] %||% default_adapter
-    adapter_name <- gsub('.', '/', adapter_name, fixed = TRUE)
-    adapter <- resource(file.path('lib', 'adapters', adapter_name))
+    adapter_name <- gsub(".", "/", adapter_name, fixed = TRUE)
+    adapter <- resource(file.path("lib", "adapters", adapter_name))
     opts    <- import_options[[index]]
 
     if (is.function(adapter)) {
@@ -26,8 +26,8 @@ build_import_stagerunner <- function(modelenv, import_options) {
       setNames(list(adapter(modelenv, opts)), adapter_name)
     } else {
       setNames(list(function(modelenv) {
-        # Only run if data isn't already loaded
-        if (!'data' %in% ls(modelenv)) {
+        # Only run if data isn"t already loaded
+        if (!"data" %in% ls(modelenv)) {
           modelenv$import_stage$adapter <- adapter
           modelenv$data <- adapter$read(opts)
         }
@@ -37,12 +37,12 @@ build_import_stagerunner <- function(modelenv, import_options) {
 
   if (length(stages) > 0)
     names(stages) <- vapply(names(stages), function(stage_name)
-      paste0("Import from ", gsub('/', '.', as.character(stage_name),
+      paste0("Import from ", gsub("/", ".", as.character(stage_name),
                                   fixed = TRUE)), character(1))
 
   stages <- append(stages,
     list("(Internal) Verify data was loaded" = function(modelenv) {
-      if (!'data' %in% ls(modelenv)) {
+      if (!"data" %in% ls(modelenv)) {
         stop("Failed to load data from all data sources", call. = FALSE)
       }
 

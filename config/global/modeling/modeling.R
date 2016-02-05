@@ -36,12 +36,12 @@ reload_syberia <- function(...) {
   invisible(TRUE)
 }
 
-test_project <- function(..., as.ci = FALSE, as.travis = as.ci) {
+test_engine <- test_project <- function(..., as.ci = FALSE, as.travis = as.ci) {
   if (isTRUE(as.ci) || isTRUE(as.travis)) {
     Sys.setenv(CI = "TRUE")
     on.exit(Sys.setenv(CI = ""), add = TRUE)
   }
-  syberia::test_project(...)
+  syberia::test_engine(...)
 }
 
 last_model <- function() { syberia::active_project()$cache_get("last_model") }
@@ -85,6 +85,7 @@ reload_syberia <- function(...) {
   syberia_project(root())
   invisible(TRUE)
 }
+
 run_model <- Ramd::define("run_model")[[1L]]
 run <- run_model
 

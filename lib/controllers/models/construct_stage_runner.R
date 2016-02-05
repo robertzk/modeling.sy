@@ -15,7 +15,9 @@ model_env <- function() {
   if (identical(getOption("environment_type"), "environment")) {
     new.env()
   } else {
-    objectdiff::tracked_environment()
+    tenv <- objectdiff::tracked_environment()
+    base::assign("data", data.frame(), envir = tenv) # Workaround for mungebit$run
+    tenv
   }
 }
 
@@ -57,7 +59,7 @@ construct_stage_runner <- function(resource) {
     stages <- structure(lapply(seq_along(stages), function(stage_index) {
       stage_name <- names(stages)[stage_index]
 
-      stage <- resource(file.path('lib', 'stages', stage_name))
+      stage <- resource(file.path("lib", "stages", stage_name))
       # TODO: (RK) Expose more director methods to common resources so we can
       # check for existence and replace with a custom message? (of course we
       # can always tryCatch and look for "Cannot find resource")
@@ -67,10 +69,10 @@ construct_stage_runner <- function(resource) {
       if (arity > 1) stage(modelenv, stages[[stage_index]])
       else if (arity == 1) {
         # If the stage only takes one argument, Syberia adopts the convention
-        # that if the argument contains the string 'opt' or 'par', then the
+        # that if the argument contains the string "opt" or "par", then the
         # options get passed, otherwise the modeling environment does.
         # This allows for flexibility with the stage definitions.
-        if (identical(TRUE, grepl('opt|par', names(formals(stage)))))
+        if (identical(TRUE, grepl("opt|par", names(formals(stage)))))
           stage(stages[[stage_index]])
         else stage(modelenv)
       } else stage()

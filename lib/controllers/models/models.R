@@ -1,13 +1,13 @@
 # Use local = TRUE when sourcing construct_stage_runner in order to ensure
 # objectdiff package is loaded for stageRunner creation (with tracked_environments).
-construct_stage_runner <- Ramd::define('construct_stage_runner')[[1]](resource)
+construct_stage_runner <- Ramd::define("construct_stage_runner")[[1]](resource)
 
-preprocessor <- Ramd::define('preprocessor')[[1]]
+preprocessor <- Ramd::define("preprocessor")[[1]]
 
 # The models controller:
 #
 # Convert a model into a stagerunner.
-function(args, resource, output, director, any_dependencies_modified) {
+function(args, resource, output, director, modified, any_dependencies_modified) {
   # Support objectdiff::ls behavior.
   parent.env(parent.env(environment(construct_stage_runner))) <- environment()
 
@@ -31,7 +31,7 @@ function(args, resource, output, director, any_dependencies_modified) {
   model_version <- gsub("^\\w+/", "", resource)
   if (isTRUE(args$fresh) || !identical(resource, director$cache_get("last_model"))) {
     stagerunner <- construct_stage_runner(output, model_version)
-  } else if (any_dependencies_modified) {
+  } else if (modified || any_dependencies_modified) {
     message(crayon::yellow("Copying cached environments..."))
     stagerunner <- construct_stage_runner(output, model_version)
     stagerunner$coalesce(director$cache_get("last_model_runner"))

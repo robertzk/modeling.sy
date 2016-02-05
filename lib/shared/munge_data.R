@@ -1,9 +1,9 @@
 select_only_training_variables <- list(
   "Select only training variables" = function(modelenv) {
-    piece <- mungebits:::mungepiece(mungebits:::mungebit(select_variables),
-      colnames(modelenv$data), setdiff(colnames(modelenv$data), 'dep_var'))
-    modelenv$data <- mungebits::munge(modelenv$data,
-                                      list("Select only training variables" = piece))
+    piece <- mungebits2::mungepiece$new(mungebits2::mungebit$new(select_variables),
+      colnames(modelenv$data), setdiff(colnames(modelenv$data), "dep_var"))
+    modelenv$data <- mungebits2::munge(modelenv$data,
+                                       list("Select only training variables" = piece))
   }
 )
 
@@ -18,7 +18,7 @@ select_only_training_variables <- list(
 #'   recorded in data/data_source.R
 munge_data <- function(sources, env = new.env()) {
   data_steps <- setNames(lapply(sources, function(data_source) {
-    data_resource <- file.path('data', data_source)
+    data_resource <- file.path("data", data_source)
     if (resource_exists(data_resource)) {
       resource(data_resource, env = env, remember = TRUE)
     }
@@ -31,5 +31,5 @@ munge_data <- function(sources, env = new.env()) {
     data_steps
   )
 
-  stageRunner$new(env, data_steps, remember = TRUE)
+  stagerunner::stageRunner$new(env, data_steps, remember = TRUE)
 }
