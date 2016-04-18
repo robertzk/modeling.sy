@@ -45,4 +45,3 @@ test_that("it can deflate a chain of helpers", {
 #  expect_identical(environment(resource()(syberiaMungebits::sure_independence_screen)),
 #                   environment(syberiaMungebits::sure_independence_screen))
 #})
-
