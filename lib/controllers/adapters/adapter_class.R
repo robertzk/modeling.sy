@@ -51,6 +51,6 @@ adapter_class <- R6::R6Class("adapter",
       if (has_default_options) print(self$default_options)
     }
 
-  ),
+  )
 
 )
