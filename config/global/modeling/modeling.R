@@ -99,7 +99,7 @@ run_model <- Ramd::define("run_model")[[1L]]
 run <- run_model
 
 makeActiveBinding("A", function() last_run()$after$data, env = globalenv())
+makeActiveBinding("df", function() last_run()$after$data, env = globalenv())
 makeActiveBinding("B", function() last_run()$before$data, env = globalenv())
 makeActiveBinding("M", function() last_run()$after$model_stage$model, env = globalenv())
 makeActiveBinding("S", function() active_runner(), env = globalenv())
-

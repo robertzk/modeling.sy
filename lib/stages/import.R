@@ -14,24 +14,29 @@ build_import_stagerunner <- function(modelenv, import_options) {
   if (nzchar(Sys.getenv("CI"))) return(list("import" = force))
 
   stages <- Reduce(append, lapply(seq_along(import_options), function(index) {
-    adapter_name <- names(import_options)[index] %||% default_adapter
-    adapter_name <- gsub(".", "/", adapter_name, fixed = TRUE)
-    adapter <- resource(file.path("lib", "adapters", adapter_name))
-    opts    <- import_options[[index]]
-
-    if (is.function(adapter)) {
-      # If a raw function, give it the import options and let it generate
-      # the stage function. This is useful if you need finer control over
-      # the importing process.
-      setNames(list(adapter(modelenv, opts)), adapter_name)
+    # If the import stage is a raw function with no adapter, turn it into a stage.
+    if (is.function(import_options[[1]])) {
+      list("function" = function(modelenv) { modelenv$data <- import_options[[1]]() })
     } else {
-      setNames(list(function(modelenv) {
-        # Only run if data isn"t already loaded
-        if (!"data" %in% ls(modelenv)) {
-          modelenv$import_stage$adapter <- adapter
-          modelenv$data <- adapter$read(opts)
-        }
-      }), adapter$.keyword)
+      adapter_name <- names(import_options)[index] %||% default_adapter
+      adapter_name <- gsub(".", "/", adapter_name, fixed = TRUE)
+      adapter <- resource(file.path("lib", "adapters", adapter_name))
+      opts    <- import_options[[index]]
+
+      if (is.function(adapter)) {
+        # If the adapter is a raw function, give it the import options and let it generate
+        # the stage function. This is useful if you need finer control over
+        # the importing process.
+        setNames(list(adapter(modelenv, opts)), adapter_name)
+      } else {
+        setNames(list(function(modelenv) {
+          # Only run if data isn"t already loaded
+          if (!"data" %in% ls(modelenv)) {
+            modelenv$import_stage$adapter <- adapter
+            modelenv$data <- adapter$read(opts)
+          }
+        }), adapter$.keyword)
+      }
     }
   }))
 

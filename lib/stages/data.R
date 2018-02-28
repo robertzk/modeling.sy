@@ -1,18 +1,18 @@
-simple_deflate <- resource("lib/shared/simple_deflate")
+# simple_deflate <- resource("lib/shared/simple_deflate")
 
-preprocess_munge_procedure <- function(munge_procedure) {
-  # We need to make sure we're not storing the entire parent environment chain
-  # when later serializing a tundraContainer.
-  deflate <- function(obj) {
-    if (is.list(obj)) lapply(obj, deflate)
-    else if (is.function(obj)) simple_deflate(obj)
-    else obj
-  }
-  for (i in seq_along(munge_procedure)) {
-    munge_procedure[[i]] <- deflate(munge_procedure[[i]])
-  }
-  munge_procedure
-}
+# preprocess_munge_procedure <- function(munge_procedure) {
+#   # We need to make sure we're not storing the entire parent environment chain
+#   # when later serializing a tundraContainer.
+#   deflate <- function(obj) {
+#     if (is.list(obj)) lapply(obj, deflate)
+#     else if (is.function(obj)) simple_deflate(obj)
+#     else obj
+#   }
+#   for (i in seq_along(munge_procedure)) {
+#     munge_procedure[[i]] <- deflate(munge_procedure[[i]])
+#   }
+#   munge_procedure
+# }
 
 #' Data stage for syberia models
 #'
@@ -25,12 +25,19 @@ preprocess_munge_procedure <- function(munge_procedure) {
 #'    The default is \code{TRUE}.
 #' @export
 data_stage <- function(modelenv, munge_procedure, remember = TRUE) {
-  munge_procedure <- preprocess_munge_procedure(munge_procedure)
+  stages <- lapply(seq_along(munge_procedure), function(index) {
+    action <- munge_procedure[[index]]
+    function(modelenv) { modelenv$data <- action(modelenv$data); modelenv }
+  })
+  names(stages) <- names(munge_procedure)
+  stageRunner$new(modelenv, stages, remember = TRUE)
 
-  stagerunner <- mungebits2::munge(modelenv, munge_procedure,
-    stagerunner = list(remember = remember)
-  ) 
+#   munge_procedure <- preprocess_munge_procedure(munge_procedure)
 
-  stagerunner
+#   stagerunner <- mungebits2::munge(modelenv, munge_procedure,
+#     stagerunner = list(remember = remember)
+#   ) 
+
+#   stagerunner
 }
 

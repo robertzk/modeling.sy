@@ -1,11 +1,9 @@
 # The data controller.
 preprocessor <- function(director, source_env) {
   # Add lexicals to local environment.
-  lexicals <- director$resource('lib/shared/lexicals')
-  for (x in ls(lexicals)) source_env[[x]] <- lexicals[[x]]
-
-  director$resource('lib/shared/source_mungebits', source_env, director)
-
+  # lexicals <- director$resource('lib/shared/lexicals')
+  # for (x in ls(lexicals)) source_env[[x]] <- lexicals[[x]]
+  # director$resource('lib/shared/source_mungebits', source_env, director)
   source()
 }
 
